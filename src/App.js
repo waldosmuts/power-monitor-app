@@ -1,25 +1,32 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from "react"
+import Navbar from "./components/Navbar"
+import Header from "./components/Header"
+import Main from "./components/Main"
+import Footer from "./components/Footer"
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { fas } from '@fortawesome/free-solid-svg-icons'
 
-function App() {
+library.add(fas)
+
+export default function App() {
+  const [darkMode, setDarkMode] = useState(JSON.parse(window.localStorage.getItem("darkMode")) === true ? true : false)
+
+  function changeTheme() {
+    setDarkMode((prevState) => (!prevState))
+  }
+
+  useEffect(() => {
+    const topLevelElement = document.querySelector("html")
+    darkMode === true ? topLevelElement.classList.add("dark") : topLevelElement.classList.remove("dark")
+    window.localStorage.setItem("darkMode", darkMode)
+  }, [darkMode])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="bg-zinc-300 dark:bg-zinc-800 h-screen font-josefin">
+      <Navbar changeTheme={changeTheme} darkMode={darkMode} />
+      <Header />
+      <Main />
+      <Footer />
     </div>
   );
 }
-
-export default App;
